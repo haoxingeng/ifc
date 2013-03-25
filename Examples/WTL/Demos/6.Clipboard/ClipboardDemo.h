@@ -1,1 +1,0 @@
-// ClipboardDemo.h
