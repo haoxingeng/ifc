@@ -25,7 +25,7 @@
 
 /// @mainpage IFC Documentation
 ///
-/// IFC (Svod Foundation Classes) is a class library for MFC programming
+/// IFC (Iris Foundation Classes) is a class library for MFC programming
 /// under VC2005 and VC2008.
 ///
 /// @n@n

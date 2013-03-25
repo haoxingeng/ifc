@@ -8,6 +8,7 @@ Debug MBCS/
 Debug Unicode/
 Release MBCS/
 Release Unicode/
+Output/
 *_i.c
 *_p.c
 *.ilk

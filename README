@@ -1,13 +1,8 @@
-IFC README
-Version: 2.0.0
-
 
 IFC (Iris Foundation Classes) is a Delphi-like class library for MFC/ATL/WTL 
 programming under VC2005 and VC2008. It reimplemented many Delphi VCL classes 
 and utility routines on VC++, therefore it is particularly suitable for VC++ 
 developers who are also familiar with Delphi. 
 
-IFC is an open source project. Please see: http://github.com/haoxingeng/ifc
-
-Authors:
-HaoXinGeng (haoxingeng@gmail.com) 
+IFC is an open source project. Please see:
+http://github.com/haoxingeng/ifc
