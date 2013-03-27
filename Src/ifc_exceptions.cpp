@@ -26,10 +26,13 @@
 #include "ifc_exceptions.h"
 #include "ifc_sysutils.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // CIfcException
+
+#ifdef IFC_USE_MFC
 
 //-----------------------------------------------------------------------------
 
@@ -56,9 +59,19 @@ BOOL CIfcException::GetErrorMessage(LPTSTR lpszError, UINT nMaxError, PUINT pnHe
 	return TRUE;
 }
 
+IMPLEMENT_DYNAMIC(CIfcException, CException)
+
+#else
+
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC(CIfcException, CException)
+const char* CIfcException::what() const
+{
+	m_strWhat = GetErrorMessage();
+	return m_strWhat;
+}
+
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // CIfcOsException
@@ -316,6 +329,7 @@ CString CIfcFileException::GetErrorMessage() const
 
 CString GetExceptionErrMsg(CException *e)
 {
+#ifdef IFC_USE_MFC
 	const int MAX_CHARS = 1024*4;
 
 	CString strResult;
@@ -324,8 +338,12 @@ CString GetExceptionErrMsg(CException *e)
 	strResult.ReleaseBuffer();
 
 	return strResult;
+#else
+	const char *s = e->what();
+	return s ? CString(CA2T(s)) : TEXT("");
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

@@ -28,7 +28,8 @@
 #include "ifc_sysutils.h"
 #include "ifc_classes.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 /// CSyncObject
@@ -211,4 +212,4 @@ bool CSemaphoreObject::Unlock(int nCount)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

@@ -30,7 +30,8 @@
 
 using namespace std;
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Macro Defines
@@ -679,9 +680,9 @@ bool CXmlDocument::SaveToStream(CStream& Stream)
 			}
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -706,9 +707,9 @@ bool CXmlDocument::LoadFromStream(CStream& Stream)
 
 		bResult = LoadFromString(s, s.GetLength());
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -733,9 +734,9 @@ bool CXmlDocument::SaveToString(std::string& str)
 			str.assign(ms.GetMemory(), (int)ms.GetSize());
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -767,9 +768,9 @@ bool CXmlDocument::LoadFromString(const char *pStr, int nBytes)
 		HRESULT hr = m_pDoc->load(Variant, &bSuccess);
 		bResult = (IS_S_OK(hr) && bSuccess && !GetRootNode().IsNull());
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -794,9 +795,9 @@ bool CXmlDocument::SaveToBuffer(CBuffer& Buffer)
 			Buffer.Assign(ms.GetMemory(), (int)ms.GetSize());
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -823,9 +824,9 @@ bool CXmlDocument::SaveToFile(LPCTSTR lpszFileName)
 		HRESULT hr = m_pDoc->save(CComVariant(lpszFileName));
 		bResult = IS_S_OK(hr);
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -850,9 +851,9 @@ bool CXmlDocument::LoadFromFile(LPCTSTR lpszFileName)
 		HRESULT hr = m_pDoc->load(CComVariant(lpszFileName), &bSuccess);
 		bResult = (IS_S_OK(hr) && bSuccess && !GetRootNode().IsNull());
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -916,9 +917,9 @@ bool CXmlDocument::CreateNew(LPCTSTR lpszEncoding, LPCTSTR lpszRootNodeName)
 				bResult = CreateRootNode(lpszRootNodeName);
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -989,4 +990,4 @@ CXmlValue CXmlDocReader::GetValue(LPCTSTR lpszNamePath)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

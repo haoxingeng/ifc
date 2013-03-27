@@ -33,7 +33,8 @@
 
 #pragma comment(lib, "imm32.lib")
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Misc Routines
@@ -185,9 +186,9 @@ bool CBuffer::LoadFromStream(CStream& Stream)
 		Stream.ReadBuffer(Data(), nSize);
 		return true;
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		return false;
 	}
 }
@@ -213,9 +214,9 @@ bool CBuffer::SaveToStream(CStream& Stream) const
 			Stream.WriteBuffer(Data(), GetSize());
 		return true;
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		return false;
 	}
 }
@@ -367,9 +368,9 @@ bool CCustomMemoryStream::SaveToStream(CStream& Stream)
 			Stream.WriteBuffer(m_pMemory, m_nSize);
 		return true;
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		return false;
 	}
 }
@@ -511,9 +512,9 @@ bool CMemoryStream::LoadFromStream(CStream& Stream)
 			Stream.ReadBuffer(m_pMemory, (int)nBytes);
 		return true;
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		return false;
 	}
 }
@@ -765,7 +766,7 @@ CResourceStream::CResourceStream(HINSTANCE hInstance, LPCTSTR lpszResName, LPCTS
 	m_hResInfo(0),
 	m_hGlobal(0)
 {
-	Initialize(hInstance, (PVOID)lpszResName, lpszResType, false);
+	Initialize(hInstance, lpszResName, lpszResType, false);
 }
 
 //-----------------------------------------------------------------------------
@@ -774,7 +775,7 @@ CResourceStream::CResourceStream(HINSTANCE hInstance, int nResId, LPCTSTR lpszRe
 	m_hResInfo(0),
 	m_hGlobal(0)
 {
-	Initialize(hInstance, (PVOID)nResId, lpszResType, true);
+	Initialize(hInstance, MAKEINTRESOURCE(nResId), lpszResType, true);
 }
 
 //-----------------------------------------------------------------------------
@@ -787,9 +788,9 @@ CResourceStream::~CResourceStream()
 
 //-----------------------------------------------------------------------------
 
-void CResourceStream::Initialize(HINSTANCE hInstance, PVOID pResName, LPCTSTR lpszResType, bool bIsFromId)
+void CResourceStream::Initialize(HINSTANCE hInstance, LPCTSTR lpszResName, LPCTSTR lpszResType, bool bIsFromId)
 {
-	m_hResInfo = ::FindResource(hInstance, (LPCTSTR)pResName, lpszResType);
+	m_hResInfo = ::FindResource(hInstance, lpszResName, lpszResType);
 	if (m_hResInfo == 0) IfcThrowException(SEM_RESOURCE_ERROR);
 	m_hGlobal = ::LoadResource(hInstance, m_hResInfo);
 	if (m_hGlobal == 0) IfcThrowException(SEM_RESOURCE_ERROR);
@@ -1421,9 +1422,9 @@ bool CStrings::LoadFromStream(CStream& Stream, bool bAsUnicode)
 
 		return true;
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		return false;
 	}
 }
@@ -1462,9 +1463,9 @@ bool CStrings::SaveToStream(CStream& Stream, bool bAsUnicode) const
 
 		return true;
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		return false;
 	}
 }
@@ -1838,6 +1839,8 @@ void CStrings::EndUpdate()
 		SetUpdateState(false);
 }
 
+#ifdef IFC_USE_MFC
+
 //-----------------------------------------------------------------------------
 
 void CStrings::ToMfcObject(CStringArray& StringArray)
@@ -1875,6 +1878,8 @@ void CStrings::FromMfcObject(CStringList& StringList)
 	for (POSITION pos = StringList.GetHeadPosition(); pos != NULL;)
 		Add(StringList.GetNext(pos));
 }
+
+#endif
 
 //-----------------------------------------------------------------------------
 
@@ -4073,14 +4078,19 @@ const CStrList& CScreen::GetFontNames()
 {
 	if (m_FontList.GetCount() == 0)
 	{
-		CClientDC dc(0);
+		HDC hDC = GetDC(0);
 		LOGFONT lf;
 
-		m_FontList.Add(TEXT("Default"));
-		memset(&lf, 0, sizeof(lf));
-		lf.lfCharSet = DEFAULT_CHARSET;
-		::EnumFontFamiliesEx(dc, &lf, EnumFontsProc, (LPARAM)&m_FontList, 0);
-		m_FontList.SetSorted(true);
+		CATCH_ALL_EXCEPTION
+		(
+			m_FontList.Add(TEXT("Default"));
+			memset(&lf, 0, sizeof(lf));
+			lf.lfCharSet = DEFAULT_CHARSET;
+			::EnumFontFamiliesEx(hDC, &lf, EnumFontsProc, (LPARAM)&m_FontList, 0);
+			m_FontList.SetSorted(true);
+		);
+
+		ReleaseDC(0, hDC);
 	}
 
 	return m_FontList;
@@ -4186,7 +4196,11 @@ HWND CClipboard::GetOwnerWindow()
 	if (m_hWndOwner != 0)
 		return m_hWndOwner;
 
+#ifdef IFC_USE_MFC
 	return ::AfxGetMainWnd()->GetSafeHwnd();
+#else
+	return m_hWndOwner;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -4757,9 +4771,9 @@ bool CPacket::Pack()
 		m_bIsPacked = true;
 		bResult = true;
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		bResult = false;
 	}
 
@@ -4785,9 +4799,9 @@ bool CPacket::Unpack(void *pBuffer, int nBytes)
 		m_bIsPacked = false;
 		bResult = true;
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		bResult = false;
 		Clear();
 	}
@@ -5312,12 +5326,10 @@ void CLogger::WriteException(CException *e)
 {
 	IFC_ASSERT(e != NULL);
 
-	const int MAX_SIZE = 1024;
-	TCHAR szMsg[MAX_SIZE];
-	if (e->GetErrorMessage(szMsg, MAX_SIZE))
-		WriteFmt(CString(TEXT("ERROR: ")) + szMsg);
+	CString strMsg = GetExceptionErrMsg(e);
+	WriteStr(CString(TEXT("ERROR: ")) + strMsg);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

@@ -32,10 +32,31 @@
 #include "ifc_global_defs.h"
 #include "ifc_errmsgs.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
+
+///////////////////////////////////////////////////////////////////////////////
+// Macros
+
+#ifdef IFC_USE_MFC
+	#define IFC_EXCEPT_NEW  new
+	#define IFC_EXCEPT_OBJ  CException*
+	#define IFC_DELETE_MFC_EXCEPT_OBJ(e)  e->Delete()
+#else
+	#define IFC_EXCEPT_NEW
+	#define IFC_EXCEPT_OBJ  CException
+	#define IFC_DELETE_MFC_EXCEPT_OBJ(e)
+#endif
+
+/// Exception shielding.
+#ifndef CATCH_ALL_EXCEPTION
+#define CATCH_ALL_EXCEPTION(x)  try { x; } catch (IFC_EXCEPT_OBJ e) { IFC_DELETE_MFC_EXCEPT_OBJ(e); } catch(...) {}
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 /// CIfcException - The base class for all exceptions in IFC.
+
+#ifdef IFC_USE_MFC
 
 class CIfcException : public CException
 {
@@ -48,6 +69,24 @@ public:
 	virtual BOOL GetErrorMessage(LPTSTR lpszError, UINT nMaxError, PUINT pnHelpContext = NULL) const;
 	virtual CString GetErrorMessage() const { return TEXT(""); }
 };
+
+#else
+
+typedef std::exception CException;
+
+class CIfcException : CException
+{
+private:
+	mutable CStringA m_strWhat;
+public:
+	CIfcException() {}
+	virtual ~CIfcException() {}
+
+	virtual CString GetErrorMessage() const { return TEXT(""); }
+	virtual const char* what() const;
+};
+
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 /// CIfcSimpleException - Simple exception
@@ -218,61 +257,61 @@ public:
 /// Throws a CIfcSimpleException exception.
 inline void IfcThrowException(LPCTSTR lpszMsg)
 {
-	throw new CIfcSimpleException(lpszMsg);
+	throw IFC_EXCEPT_NEW CIfcSimpleException(lpszMsg);
 }
 
 /// Throws a dummy exception.
 inline void IfcThrowDummyException()
 {
-	throw new CIfcSimpleException(TEXT(""));
+	throw IFC_EXCEPT_NEW CIfcSimpleException(TEXT(""));
 }
 
 /// Throws a CIfcOsException exception.
 inline void IfcThrowOsException(int nOsError)
 {
-	throw new CIfcOsException(nOsError);
+	throw IFC_EXCEPT_NEW CIfcOsException(nOsError);
 }
 
 /// Throws a CIfcOsException exception.
 inline void IfcThrowOsException()
 {
-	throw new CIfcOsException(::GetLastError());
+	throw IFC_EXCEPT_NEW CIfcOsException(::GetLastError());
 }
 
 /// Throws a CIfcMemoryException exception.
 inline void IfcThrowMemoryException()
 {
-	throw new CIfcMemoryException(SEM_OUT_OF_MEMORY);
+	throw IFC_EXCEPT_NEW CIfcMemoryException(SEM_OUT_OF_MEMORY);
 }
 
 /// Throws a CIfcStreamException exception.
 inline void IfcThrowStreamException(LPCTSTR lpszMsg)
 {
-	throw new CIfcStreamException(lpszMsg);
+	throw IFC_EXCEPT_NEW CIfcStreamException(lpszMsg);
 }
 
 /// Throws a CIfcRegistryException exception.
 inline void IfcThrowRegistryException(LPCTSTR lpszMsg)
 {
-	throw new CIfcRegistryException(lpszMsg);
+	throw IFC_EXCEPT_NEW CIfcRegistryException(lpszMsg);
 }
 
 /// Throws a CIfcIniFileException exception.
 inline void IfcThrowIniFileException(LPCTSTR lpszMsg)
 {
-	throw new CIfcIniFileException(lpszMsg);
+	throw IFC_EXCEPT_NEW CIfcIniFileException(lpszMsg);
 }
 
 /// Throws a CIfcThreadException exception.
 inline void IfcThrowThreadException(LPCTSTR lpszMsg)
 {
-	throw new CIfcThreadException(lpszMsg);
+	throw IFC_EXCEPT_NEW CIfcThreadException(lpszMsg);
 }
 
 /// Throws a CIfcFileException exception.
 inline void IfcThrowFileException(LPCTSTR lpszFileName, int nCause, int nOsError)
 {
-	throw new CIfcFileException(lpszFileName, nCause, nOsError);
+	throw IFC_EXCEPT_NEW CIfcFileException(lpszFileName, nCause, nOsError);
 }
 
 /// Throws a CIfcFileException exception.
@@ -281,26 +320,26 @@ inline void IfcThrowFileException(LPCTSTR lpszFileName, int nOsError)
 	if (nOsError != 0)
 	{
 		int nCause = CIfcFileException::OsErrorToCause(nOsError);
-		throw new CIfcFileException(lpszFileName, nCause, nOsError);
+		throw IFC_EXCEPT_NEW CIfcFileException(lpszFileName, nCause, nOsError);
 	}
 }
 
 /// Throws a CIfcDataAlgoException exception.
 inline void IfcThrowDataAlgoException(LPCTSTR lpszMsg)
 {
-	throw new CIfcDataAlgoException(lpszMsg);
+	throw IFC_EXCEPT_NEW CIfcDataAlgoException(lpszMsg);
 }
 
 /// Throws a CIfcSocketException exception.
 inline void IfcThrowSocketException(LPCTSTR lpszMsg)
 {
-	throw new CIfcSocketException(lpszMsg);
+	throw IFC_EXCEPT_NEW CIfcSocketException(lpszMsg);
 }
 
 /// Throws a CIfcDbException exception.
 inline void IfcThrowDbException(LPCTSTR lpszMsg)
 {
-	throw new CIfcDbException(lpszMsg);
+	throw IFC_EXCEPT_NEW CIfcDbException(lpszMsg);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -310,6 +349,6 @@ CString GetExceptionErrMsg(CException *e);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc
 
 /// @}

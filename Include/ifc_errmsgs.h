@@ -28,7 +28,8 @@
 #include "ifc_options.h"
 #include "ifc_global_defs.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // IFC Error Message
@@ -91,4 +92,4 @@ const TCHAR* const SEM_MYSQL_STORE_RESULT_ERROR     = TEXT("mysql_store_result e
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

@@ -26,7 +26,8 @@
 #include "ifc_pipe.h"
 #include "ifc_sysutils.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // CNamedPipeServer
@@ -111,9 +112,9 @@ bool CNamedPipeServer::NotifyConnect(HANDLE hPipeHandle)
 				bResult = true;
 			}
 		}
-		catch (CException* e)
+		catch (IFC_EXCEPT_OBJ e)
 		{
-			e->Delete();
+			IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		}
 		catch (...)
 		{}
@@ -591,9 +592,9 @@ void CNamedPipeListenerThread::Execute()
 			}
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -660,4 +661,4 @@ bool CNamedPipeClient::Connect(LPCTSTR lpszPipeName, int nTimeOutMSecs)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

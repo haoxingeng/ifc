@@ -26,7 +26,8 @@
 #include "ifc_iocp.h"
 #include "ifc_sysutils.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Misc Routines
@@ -317,9 +318,9 @@ void CIocpObject::CIocpWorkerThread::Execute()
 	{
 		m_IocpObject.Work();
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -744,4 +745,4 @@ int CIocpObject::GetPendingCount(IOCP_TASK_TYPE nTaskType)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

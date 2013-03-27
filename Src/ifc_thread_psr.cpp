@@ -28,7 +28,8 @@
 #include "ifc_exceptions.h"
 #include "ifc_errmsgs.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // CThreadProcessor::CWorkerThread
@@ -203,9 +204,9 @@ void CDaemonJobPsr::Process()
 			{
 				Job.Process();
 			}
-			catch (CException* e)
+			catch (IFC_EXCEPT_OBJ e)
 			{
-				e->Delete();
+				IFC_DELETE_MFC_EXCEPT_OBJ(e);
 			}
 			catch (...)
 			{}
@@ -237,4 +238,4 @@ void CDaemonJobPsr::Terminate()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

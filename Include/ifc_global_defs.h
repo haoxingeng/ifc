@@ -25,8 +25,10 @@
 
 /// @mainpage IFC Documentation
 ///
-/// IFC (Iris Foundation Classes) is a class library for MFC programming
-/// under VC2005 and VC2008.
+/// IFC (Iris Foundation Classes) is a class library for MFC/WTL/ATL programming
+/// under VC2005/VC2008/VC2010. It reimplemented many Delphi VCL classes and
+/// utility routines on VC++, therefore it is particularly suitable for VC++ 
+/// developers who are also familiar with Delphi.
 ///
 /// @n@n
 
@@ -73,21 +75,9 @@ using stdext::hash_map;
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-// Namespace Definitions
 
-/// Define the name for the IFC namespace.
-#define NS_IFC  ifc
-
-/// Define a new namespace.
-#define BEGIN_NAMESPACE(ns)     namespace ns {
-/// End the previously defined namespace scope.
-#define END_NAMESPACE(ns)       }
-/// Use the specified namespace.
-#define USING_NAMESPACE(ns)     using namespace ns
-
-///////////////////////////////////////////////////////////////////////////////
-
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -126,11 +116,6 @@ BEGIN_NAMESPACE(NS_IFC)
 /// Release and empty the object.
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(x)         { if (x) (x)->Release(); (x) = NULL; }
-#endif
-
-/// Exception shielding.
-#ifndef CATCH_ALL_EXCEPTION
-#define CATCH_ALL_EXCEPTION(x)  try { x; } catch (CException* e) { e->Delete(); } catch(...) {}
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -182,7 +167,7 @@ enum FILE_OPEN_MODE
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc
 
 ///////////////////////////////////////////////////////////////////////////////
 

@@ -28,6 +28,7 @@
 
 #pragma once
 
+#include <windows.h>
 #include <winsvc.h>
 
 #include "ifc_options.h"
@@ -35,7 +36,8 @@
 #include "ifc_classes.h"
 #include "ifc_exceptions.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // CWinService - The windows service class.
@@ -148,6 +150,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc
 
 /// @}

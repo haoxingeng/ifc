@@ -23,12 +23,17 @@
 /// @file ifc_sysutils.cpp
 
 #include "stdafx.h"
+#include <windows.h>
 #include <tlhelp32.h>
+#include <shlobj.h>
+#include <shellapi.h>
+
 #include "ifc_sysutils.h"
 
 #pragma comment (lib, "version.lib")
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 using namespace std;
 
@@ -1196,7 +1201,7 @@ bool ExecuteFile(LPCTSTR lpszFileName, LPCTSTR lpszParams, LPCTSTR lpszDefaultDi
 	HINSTANCE hHandle = ::ShellExecute(0, NULL, lpszFileName, lpszParams, lpszDefaultDir, nShowCmd);
 	if (pHandle != NULL)
 		*pHandle = hHandle;
-	return ((int)hHandle > HINSTANCE_ERROR);
+	return ((LONG_PTR)hHandle > HINSTANCE_ERROR);
 }
 
 //-----------------------------------------------------------------------------
@@ -1205,7 +1210,7 @@ bool OpenUrl(LPCTSTR lpszUrl)
 {
 	CString strUrl(lpszUrl);
 	strUrl.Trim();
-	return (int)::ShellExecute(0, TEXT("Open"), strUrl, TEXT(""), TEXT(""), SW_SHOW) > HINSTANCE_ERROR;
+	return (LONG_PTR)::ShellExecute(0, TEXT("Open"), strUrl, TEXT(""), TEXT(""), SW_SHOW) > HINSTANCE_ERROR;
 }
 
 //-----------------------------------------------------------------------------
@@ -1765,21 +1770,32 @@ bool RemoveDir(LPCTSTR lpszDir, bool bRecursive)
 		return ::RemoveDirectory(lpszDir) != 0;
 
 	bool bResult = true;
-	CFileFind Finder;
 	CString strPath(PathWithSlash(lpszDir));
+	HANDLE nFindHandle;
+	WIN32_FIND_DATA FindData;
 
-	BOOL bWorking = Finder.FindFile(strPath + TEXT("*.*"));
-	while (bWorking && bResult)
+	nFindHandle = FindFirstFile(strPath + TEXT("*.*"), &FindData);
+	if (nFindHandle != INVALID_HANDLE_VALUE)
 	{
-		bWorking = Finder.FindNextFile();
-		if (Finder.IsDots()) continue;
+		do
+		{
+			DWORD nAttr = FindData.dwFileAttributes;
+			CString strName = FindData.cFileName;
+			CString strFileName = strPath + strName;
+			bool bIsDir = (nAttr & FILE_ATTRIBUTE_DIRECTORY) != 0;
+			bool bIsSpecDir = bIsDir && (strName == TEXT(".") || strName == TEXT(".."));
 
-		if (Finder.IsDirectory())
-			bResult = RemoveDir(Finder.GetFilePath(), true);
-		else
-			RemoveFile(strPath + Finder.GetFileName());
+			if (bIsSpecDir) continue;
+
+			if (bIsDir)
+				bResult = RemoveDir(strFileName, true);
+			else
+				RemoveFile(strFileName);
+		}
+		while (FindNextFile(nFindHandle, &FindData));
+
+		FindClose(nFindHandle);
 	}
-	Finder.Close();
 
 	bResult = RemoveDir(strPath, false);
 	return bResult;
@@ -1886,9 +1902,9 @@ bool SetAutoRunOnStartup(bool bAutoRun, bool bCurrentUser, LPCTSTR lpszAppTitle,
 			}
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		bResult = false;
 	}
 
@@ -1935,9 +1951,9 @@ bool AssociateFile(LPCTSTR lpszFileExt, LPCTSTR lpszFileKey, LPCTSTR lpszAppName
 		if (bResult)
 			Reg.WriteString(TEXT(""), strAppExeName + TEXT(",") + IntToStr(nIconIndex));
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		bResult = false;
 	}
 
@@ -1993,9 +2009,9 @@ bool RegisterUrlProtocol(LPCTSTR lpszProtocolName, LPCTSTR lpszExeFileName, int 
 				Reg.WriteInteger(TEXT("WarnOnOpen"), 0);
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		bResult = false;
 	}
 
@@ -2375,11 +2391,24 @@ CString GetAppExeName(bool bIncludePath)
 CString GetModuleExeName(HMODULE hModule, bool bIncludePath)
 {
 	if (hModule == NULL)
-		hModule = ::AfxGetInstanceHandle();
+		hModule = GetSelfModuleHandle();
 
 	TCHAR szBuffer[IFC_MAX_PATH];
 	::GetModuleFileName(hModule, szBuffer, IFC_MAX_PATH);
 	return bIncludePath? szBuffer : ExtractFileName(szBuffer);
+}
+
+//-----------------------------------------------------------------------------
+
+HMODULE GetSelfModuleHandle()
+{
+#ifdef IFC_USE_MFC
+	return ::AfxGetInstanceHandle();
+#else
+	MEMORY_BASIC_INFORMATION mbi;
+	return ((::VirtualQuery(GetSelfModuleHandle, &mbi, sizeof(mbi)) != 0) ?
+		(HMODULE)mbi.AllocationBase : NULL);
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -2463,6 +2492,8 @@ int ParseCommandLine(CStrList& ArgList)
 	return ParseCommandLine(::GetCommandLine(), ArgList);
 }
 
+#ifdef IFC_USE_MFC
+
 //-----------------------------------------------------------------------------
 
 int ShowMessage(LPCTSTR lpszMsg, UINT nType)
@@ -2477,6 +2508,27 @@ void ShowMessage(INT64 nValue)
 	ShowMessage(strMsg);
 }
 
+#else
+
+//-----------------------------------------------------------------------------
+
+int ShowMessage(LPCTSTR lpszMsg, LPCTSTR lpszCaption, UINT nType)
+{
+	CString strCaption(lpszCaption);
+	if (strCaption.IsEmpty())
+		strCaption.LoadString(128);   // suppose IDR_MAINFRAME == 128.
+	return ::MessageBox(::GetActiveWindow(), lpszMsg, strCaption, MB_OK | MB_ICONINFORMATION);
+}
+
+void ShowMessage(INT64 nValue, LPCTSTR lpszCaption)
+{
+	CString strMsg;
+	strMsg.Format(TEXT("%I64d"), nValue);
+	ShowMessage(strMsg, lpszCaption);
+}
+
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

@@ -26,7 +26,8 @@
 #include "ifc_data_algo.h"
 #include "ifc_sysutils.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Error Messages
@@ -3469,4 +3470,4 @@ CCipherContext CCipher_Gost::Context()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

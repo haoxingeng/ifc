@@ -29,7 +29,8 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Misc Routines
@@ -841,9 +842,9 @@ int CTcpConnection::DoSyncSendBuffer(void *pBuffer, int nSize, int nTimeOutMSecs
 				break;
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		bError = true;
 		break;
 	}
@@ -926,9 +927,9 @@ int CTcpConnection::DoSyncRecvBuffer(void *pBuffer, int nSize, int nTimeOutMSecs
 				break;
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		bError = true;
 		break;
 	}
@@ -1068,9 +1069,9 @@ int CTcpClient::AsyncConnect(const CString& strIp, int nPort, int nTimeOutMSecs)
 			m_PeerAddr = CPeerAddress(ntohl(Addr.sin_addr.s_addr), nPort);
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		m_Socket.Close();
 		nResult = ACS_FAILED;
 	}
@@ -1335,9 +1336,9 @@ void CUdpListenerThread::Execute()
 				break;  // error
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -1486,9 +1487,9 @@ void CTcpListenerThread::Execute()
 				break;  // error
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -1545,9 +1546,9 @@ void CTcpConnectorPool::Process(CWorkerThread *pThread)
 			ProcessConnect();
 			ProcessResult();
 		}
-		catch (CException* e)
+		catch (IFC_EXCEPT_OBJ e)
 		{
-			e->Delete();
+			IFC_DELETE_MFC_EXCEPT_OBJ(e);
 		}
 		catch (...)
 		{}
@@ -1717,4 +1718,4 @@ void CTcpConnectorPool::Clear()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

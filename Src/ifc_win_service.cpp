@@ -30,7 +30,8 @@
 
 using namespace std;
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -206,9 +207,9 @@ void CWinService::ServiceMain(DWORD argc, LPTSTR *argv)
 			}
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -278,9 +279,9 @@ void CWinService::Debug(DWORD argc, LPTSTR *argv)
 		if (OnInitialize(argc, argv))
 			OnStart();
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -701,4 +702,4 @@ bool CWinService::Stop()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

@@ -4,10 +4,10 @@
 *.sln.docstates
 
 # Build results
-Debug MBCS/
-Debug Unicode/
-Release MBCS/
-Release Unicode/
+Debug MBCS*/
+Debug Unicode*/
+Release MBCS*/
+Release Unicode*/
 Output/
 *_i.c
 *_p.c

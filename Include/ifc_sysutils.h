@@ -32,7 +32,8 @@
 #include "ifc_global_defs.h"
 #include "ifc_classes.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Utilities Prototype
@@ -1013,6 +1014,9 @@ CString GetAppExeName(bool bIncludePath = true);
 /// Returns the file name of this module (dll/ocx/...).
 CString GetModuleExeName(HMODULE hModule = NULL, bool bIncludePath = true);
 
+/// Returns the handle of the current module.
+HMODULE GetSelfModuleHandle();
+
 /// Parses the specified command line, stores the arguments to @a ArgList, and returns the number of arguments.
 /// For example:
 /** @code
@@ -1023,15 +1027,22 @@ int ParseCommandLine(LPCTSTR lpszCmdLine, CStrList& ArgList);
 /// Parses the current command line, stores the arguments to @a ArgList, and returns the number of arguments.
 int ParseCommandLine(CStrList& ArgList);
 
+#ifdef IFC_USE_MFC
 /// A simple message box.
 int ShowMessage(LPCTSTR lpszMsg, UINT nType = (MB_OK | MB_ICONINFORMATION));
 /// A simple message box to display an integer.
 void ShowMessage(INT64 nValue);
+#else
+/// A simple message box.
+int ShowMessage(LPCTSTR lpszMsg, LPCTSTR lpszCaption = TEXT(""), UINT nType = (MB_OK | MB_ICONINFORMATION));
+/// A simple message box to display an integer.
+void ShowMessage(INT64 nValue, LPCTSTR lpszCaption = TEXT(""));
+#endif
 
 /// @}
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc
 
 /// @}

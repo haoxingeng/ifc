@@ -27,7 +27,8 @@
 #include "ifc_sysutils.h"
 #include "ifc_errmsgs.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // CDbConnParams
@@ -151,9 +152,9 @@ void CDbConnection::ExecCmdOnConnected()
 					Query->SetSql(CmdList[i]);
 					Query->Execute();
 				}
-				catch (CException* e)
+				catch (IFC_EXCEPT_OBJ e)
 				{
-					e->Delete();
+					IFC_DELETE_MFC_EXCEPT_OBJ(e);
 				}
 				catch (...)
 				{}
@@ -162,9 +163,9 @@ void CDbConnection::ExecCmdOnConnected()
 			Query->m_pDbConnection = NULL;
 		}
 	}
-	catch (CException* e)
+	catch (IFC_EXCEPT_OBJ e)
 	{
-		e->Delete();
+		IFC_DELETE_MFC_EXCEPT_OBJ(e);
 	}
 	catch (...)
 	{}
@@ -779,4 +780,4 @@ CDbConnectionPool* CDatabase::GetDbConnectionPool()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

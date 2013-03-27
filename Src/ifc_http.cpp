@@ -27,7 +27,8 @@
 #include "ifc_errmsgs.h"
 #include "ifc_sysutils.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Misc Routines
@@ -1322,7 +1323,7 @@ void CIocpHttpClient::IocpCallBackProc(const CIocpTaskData& TaskData, void *pPar
 			GetIocpObject().Send((SOCKET)TaskData.GetFileHandle(),
 				TaskData.GetEntireDataBuf(),
 				TaskData.GetEntireDataSize(),
-				TaskData.GetDataBuf() - TaskData.GetEntireDataBuf() + TaskData.GetBytesTrans(),
+				(int)(TaskData.GetDataBuf() - TaskData.GetEntireDataBuf() + TaskData.GetBytesTrans()),
 				TaskData.GetCallBack(), TaskData.GetCaller(), TaskData.GetParams());
 		}
 		else if (TaskData.GetTaskType() == ITT_RECV)
@@ -1330,7 +1331,7 @@ void CIocpHttpClient::IocpCallBackProc(const CIocpTaskData& TaskData, void *pPar
 			GetIocpObject().Recv((SOCKET)TaskData.GetFileHandle(),
 				TaskData.GetEntireDataBuf(),
 				TaskData.GetEntireDataSize(),
-				TaskData.GetDataBuf() - TaskData.GetEntireDataBuf() + TaskData.GetBytesTrans(),
+				(int)(TaskData.GetDataBuf() - TaskData.GetEntireDataBuf() + TaskData.GetBytesTrans()),
 				TaskData.GetCallBack(), TaskData.GetCaller(), TaskData.GetParams());
 		}
 
@@ -1543,4 +1544,4 @@ void CIocpHttpClient::SetReceiveFileCallBack(IOCPHTTP_ONRECEIVEFILE_PROC pProc, 
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

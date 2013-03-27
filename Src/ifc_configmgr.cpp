@@ -26,7 +26,8 @@
 #include "ifc_configmgr.h"
 #include "ifc_sysutils.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // CBaseConfigMgr
@@ -444,4 +445,4 @@ void CRegConfigIO::DeleteSection(LPCTSTR lpszSection)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc

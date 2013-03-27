@@ -32,7 +32,8 @@
 #include "ifc_global_defs.h"
 #include "ifc_exceptions.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes
@@ -466,7 +467,7 @@ public:
 	/// @param[in] nOpenMode
 	///   Access and sharing mode. Specifies the action to take when opening the file.
 	///   You can combine options listed below by using the bitwise-OR (|) operator.
-	///   See enum type @ref FILE_OPEN_MODE.
+	///   See enum type FILE_OPEN_MODE.
 	/// @remarks
 	///   If the file cannot be created or opened, the constructor throws a CIfcFileException exception.
 	CFileStream(LPCTSTR lpszFileName, DWORD nOpenMode);
@@ -482,7 +483,7 @@ public:
 	/// @param[in] nOpenMode
 	///   Access and sharing mode. Specifies the action to take when opening the file.
 	///   You can combine options listed below by using the bitwise-OR (|) operator.
-	///   See enum type @ref FILE_OPEN_MODE.
+	///   See enum type FILE_OPEN_MODE.
 	/// @param[in] pException
 	///   A pointer to an existing file-exception object that will receive the status of a failed operation.
 	///   If @a pException is NULL, it will be ignored.
@@ -550,7 +551,7 @@ private:
 	HRSRC m_hResInfo;
 	HANDLE m_hGlobal;
 private:
-	void Initialize(HINSTANCE hInstance, PVOID pResName, LPCTSTR lpszResType, bool bIsFromId);
+	void Initialize(HINSTANCE hInstance, LPCTSTR lpszResName, LPCTSTR lpszResType, bool bIsFromId);
 public:
 	/// Construct the object associated with a particular resource name and type.
 	/// The constructor finds the resource data and loads it into the memory buffer.
@@ -1263,6 +1264,7 @@ public:
 	///   Use CStrings::CAutoUpdater object to call BeginUpdate and EndUpdate automatically in a scope.
 	void EndUpdate();
 
+#ifdef IFC_USE_MFC
 	/// Converts the contents from CStrings to MFC CStringArray.
 	void ToMfcObject(CStringArray& StringArray);
 	/// Converts the contents from CStrings to MFC CStringList.
@@ -1271,6 +1273,7 @@ public:
 	void FromMfcObject(CStringArray& StringArray);
 	/// Converts the contents from MFC CStringList to CStrings.
 	void FromMfcObject(CStringList& StringList);
+#endif
 
 	/// Assignment operator.
 	CStrings& operator = (const CStrings& rhs);
@@ -3342,6 +3345,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc
 
 /// @}

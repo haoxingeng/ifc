@@ -27,7 +27,8 @@
 #include "ifc_sysutils.h"
 #include "ifc_errmsgs.h"
 
-BEGIN_NAMESPACE(NS_IFC)
+namespace ifc
+{
 
 ///////////////////////////////////////////////////////////////////////////////
 // CMySqlConnection
@@ -355,4 +356,4 @@ UINT64 CMySqlQuery::GetLastInsertId()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-END_NAMESPACE(NS_IFC)
+} // namespace ifc
