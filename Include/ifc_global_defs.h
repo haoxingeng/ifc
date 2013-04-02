@@ -25,7 +25,7 @@
 
 /// @mainpage IFC Documentation
 ///
-/// IFC (Iris Foundation Classes) is a class library for MFC/WTL/ATL programming
+/// IFC (Iris Foundation Classes) is a class library for C++ programming
 /// under VC2005/VC2008/VC2010. It reimplemented many Delphi VCL classes and
 /// utility routines on VC++, therefore it is particularly suitable for VC++ 
 /// developers who are also familiar with Delphi.
