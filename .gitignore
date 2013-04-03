@@ -9,6 +9,7 @@ Debug Unicode*/
 Release MBCS*/
 Release Unicode*/
 Output/
+Test/
 *_i.c
 *_p.c
 *.ilk

@@ -23,9 +23,6 @@
 /// @file ifc_iocp.h
 /// Defines the IOCP classes.
 
-/// @addtogroup Network
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
@@ -35,8 +32,12 @@
 #include "ifc_socket.h"
 #include "ifc_exceptions.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Network
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes
@@ -270,6 +271,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

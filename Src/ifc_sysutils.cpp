@@ -1872,6 +1872,59 @@ CString GetLongFileName(LPCTSTR lpszFileName)
 
 //-----------------------------------------------------------------------------
 
+static void DoFindFiles(LPCTSTR lpszPath, LPCTSTR lpszPattern, CStrList& FileList,
+	bool bFindFile, bool bFindDir, bool bIncludeHidden, bool bRecursive)
+{
+	CString strPath(PathWithSlash(lpszPath));
+	CString strPattern = (lpszPattern == NULL || *lpszPattern == 0) ? TEXT("*.*") : lpszPattern;
+	HANDLE nFindHandle;
+	WIN32_FIND_DATA FindData;
+
+	nFindHandle = FindFirstFile(strPath + strPattern, &FindData);
+	if (nFindHandle != INVALID_HANDLE_VALUE)
+	{
+		do
+		{
+			CString strName = FindData.cFileName;
+			CString strFileName = strPath + strName;
+
+			DWORD nAttr = FindData.dwFileAttributes;
+			bool bIsHidden = (nAttr & FILE_ATTRIBUTE_HIDDEN) != 0;
+			bool bIsDir = (nAttr & FILE_ATTRIBUTE_DIRECTORY) != 0;
+			bool bIsDots = bIsDir && (strName == TEXT(".") || strName == TEXT(".."));
+			bool bIsSpecFile = (nAttr & FILE_ATTRIBUTE_SYSTEM) != 0;
+
+			if (bIsDots || bIsSpecFile) continue;
+			if (!bIncludeHidden && bIsHidden) continue;
+
+			if (bIsDir)
+			{
+				if (bFindDir)
+					FileList.Add(strFileName);
+				if (bRecursive)
+					DoFindFiles(strFileName, lpszPattern, FileList, bFindFile, bFindDir, bIncludeHidden, bRecursive);
+			}
+			else
+			{
+				if (bFindFile)
+					FileList.Add(strFileName);
+			}
+		}
+		while (FindNextFile(nFindHandle, &FindData));
+
+		FindClose(nFindHandle);
+	}
+}
+
+void FindFiles(LPCTSTR lpszPath, LPCTSTR lpszPattern, CStrList& FileList,
+	bool bFindFile, bool bFindDir, bool bIncludeHidden, bool bRecursive)
+{
+	FileList.Clear();
+	DoFindFiles(lpszPath, lpszPattern, FileList, bFindFile, bFindDir, bIncludeHidden, bRecursive);
+}
+
+//-----------------------------------------------------------------------------
+
 bool SetAutoRunOnStartup(bool bAutoRun, bool bCurrentUser, LPCTSTR lpszAppTitle, LPCTSTR lpszAppParam)
 {
 	bool bResult;

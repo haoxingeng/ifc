@@ -23,17 +23,18 @@
 /// @file ifc_exceptions.h
 /// Defines the exception classes.
 
-/// @addtogroup Exceptions
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
 #include "ifc_global_defs.h"
 #include "ifc_errmsgs.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Exceptions
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Macros
@@ -349,6 +350,6 @@ CString GetExceptionErrMsg(CException *e);
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

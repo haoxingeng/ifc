@@ -23,9 +23,6 @@
 /// @file ifc_win_service.h
 /// Defines the Windows Service classes.
 
-/// @addtogroup Classes
-/// @{
-
 #pragma once
 
 #include <windows.h>
@@ -36,8 +33,12 @@
 #include "ifc_classes.h"
 #include "ifc_exceptions.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Classes
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // CWinService - The windows service class.
@@ -150,6 +151,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

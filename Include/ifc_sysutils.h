@@ -23,20 +23,21 @@
 /// @file ifc_sysutils.h
 /// Declares the utility routines.
 
-/// @addtogroup Utilities
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
 #include "ifc_global_defs.h"
 #include "ifc_classes.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
 
 ///////////////////////////////////////////////////////////////////////////////
 // Utilities Prototype
+
+/// @addtogroup Utilities
+/// @{
 
 //-----------------------------------------------------------------------------
 
@@ -777,6 +778,33 @@ CString GetShortFileName(LPCTSTR lpszFileName);
 @endverbatim */
 CString GetLongFileName(LPCTSTR lpszFileName);
 
+/// Finds the files or directories in the specified path.
+/// @param[in] lpszPath
+///   The search path.
+/// @param[in] lpszPattern
+///   The search pattern.
+/// @param[out] FileList
+///   Stores the search result, contains the full path name of the files.
+/// @param[in] bFindFile
+///   Indicates whether to search the files.
+/// @param[in] bFindDir
+///   Indicates whether to search the directories.
+/// @param[in] bIncludeHidden
+///   Indicates whether to search the hidden files and hidden directories.
+/// @param[in] bRecursive
+///   Determines whether to find files recursively.
+/// For example:
+/** @verbatim
+	FindFiles("c:\\Windows\\", "*.*", FileList, true, false, false);
+	Returns:
+	    "c:\\Windows\\bfsvc.exe"
+		"c:\\Windows\\explorer.exe"
+		"c:\\Windows\\regedit.exe"
+		...
+@endverbatim */
+void FindFiles(LPCTSTR lpszPath, LPCTSTR lpszPattern, CStrList& FileList,
+	bool bFindFile, bool bFindDir, bool bIncludeHidden, bool bRecursive = false);
+
 /// @}
 
 //-----------------------------------------------------------------------------
@@ -1043,6 +1071,6 @@ void ShowMessage(INT64 nValue, LPCTSTR lpszCaption = TEXT(""));
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

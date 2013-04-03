@@ -23,9 +23,6 @@
 /// @file ifc_thread_psr.h
 /// Defines the thread processor classes.
 
-/// @addtogroup Classes
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
@@ -34,8 +31,12 @@
 #include "ifc_thread.h"
 #include "ifc_sync_objs.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Classes
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes
@@ -165,6 +166,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

@@ -23,9 +23,6 @@
 /// @file ifc_data_algo.h
 /// Defines the data process algorithm classes.
 
-/// @addtogroup Classes
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
@@ -36,8 +33,12 @@
 #include <string>
 #include <memory>
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Classes
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes
@@ -550,6 +551,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

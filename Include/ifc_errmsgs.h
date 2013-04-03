@@ -28,6 +28,7 @@
 #include "ifc_options.h"
 #include "ifc_global_defs.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
 

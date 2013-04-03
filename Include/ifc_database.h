@@ -23,9 +23,6 @@
 /// @file ifc_database.h
 /// Defines the database classes.
 
-/// @addtogroup Database
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
@@ -34,8 +31,12 @@
 #include "ifc_socket.h"
 #include "ifc_exceptions.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Database
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes
@@ -541,6 +542,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

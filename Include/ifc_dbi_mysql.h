@@ -23,9 +23,6 @@
 /// @file ifc_dbi_mysql.h
 /// Defines the mysql classes.
 
-/// @addtogroup Database
-/// @{
-
 #pragma once
 
 #include "ifc_database.h"
@@ -33,8 +30,12 @@
 #include <errmsg.h>
 #include <mysql.h>
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Database
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes
@@ -141,6 +142,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

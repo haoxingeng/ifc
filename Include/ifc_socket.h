@@ -23,9 +23,6 @@
 /// @file ifc_socket.h
 /// Defines the socket classes.
 
-/// @addtogroup Network
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
@@ -37,8 +34,12 @@
 
 #include <winsock2.h>
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Network
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes
@@ -649,6 +650,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

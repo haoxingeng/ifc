@@ -23,9 +23,6 @@
 /// @file ifc_sync_objs.h
 /// Defines the synchronized object classes.
 
-/// @addtogroup Classes
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
@@ -33,8 +30,12 @@
 #include "ifc_classes.h"
 #include "ifc_exceptions.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Classes
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes
@@ -181,6 +182,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

@@ -23,16 +23,17 @@
 /// @file ifc_thread.h
 /// Defines the thread class.
 
-/// @addtogroup Classes
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
 #include "ifc_global_defs.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Classes
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Type Definitions
@@ -279,6 +280,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

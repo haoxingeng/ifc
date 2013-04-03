@@ -23,17 +23,18 @@
 /// @file ifc_configmgr.h
 /// Defines the configuration manager classes.
 
-/// @addtogroup Classes
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
 #include "ifc_global_defs.h"
 #include "ifc_classes.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Classes
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // classes:
@@ -316,6 +317,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

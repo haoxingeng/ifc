@@ -23,17 +23,18 @@
 /// @file ifc_classes.h
 /// Defines the common classes.
 
-/// @addtogroup Classes
-/// @{
-
 #pragma once
 
 #include "ifc_options.h"
 #include "ifc_global_defs.h"
 #include "ifc_exceptions.h"
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Classes
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes
@@ -3345,6 +3346,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc

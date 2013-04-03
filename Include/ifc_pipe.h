@@ -20,11 +20,8 @@
 *                                                                            *
 \****************************************************************************/
 
-/// @file ifc_iocp.h
+/// @file ifc_pipe.h
 /// Defines the pipe classes.
-
-/// @addtogroup Network
-/// @{
 
 #pragma once
 
@@ -37,8 +34,12 @@
 
 #include <vector>
 
+/// The namespace of IFC.
 namespace ifc
 {
+
+/// @addtogroup Network
+/// @{
 
 ///////////////////////////////////////////////////////////////////////////////
 // Classes
@@ -202,6 +203,6 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////
 
-} // namespace ifc
-
 /// @}
+
+} // namespace ifc
